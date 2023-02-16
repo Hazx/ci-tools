@@ -12,7 +12,7 @@ CI-Tools 又名 CI-Base，是一个用于 Gitlab CI/CD 阶段的工具镜像，�
 - Kaniko: v1.9.1
 - Kubectl: 1.21.14
 - Node.js: v14.21.2
-- OpenJDK: 8
+- JDK: 1.8.0_352
 - Maven: 3.9.0
 
 ## 默认工作目录
