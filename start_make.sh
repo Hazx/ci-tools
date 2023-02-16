@@ -7,7 +7,7 @@ dest_img="citools"   # 不能是路径，不能带 /
 dest_tag="0.2"
 
 if [[ $(id -u) -ne 0 ]];then
-    echo "必须在root账户下运行，请尝试使用 sudo -i 切换账户。"
+    echo "必须在root账户下运行，请尝试使用 sudo -i 切换账户。" 
     exit 1
 fi
 

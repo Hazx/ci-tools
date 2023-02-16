@@ -23,7 +23,7 @@ EOF
 apt-get update -y
 
 ## 调整时区
-export DEBIAN_FRONTEND="noninteractive"
+export DEBIAN_FRONTEND="noninteractive" 
 apt-get install -y tzdata
 cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
