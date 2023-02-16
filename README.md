@@ -4,7 +4,7 @@ CI-Tools 又名 CI-Base，是一个用于 Gitlab CI/CD 阶段的工具镜像，�
 
 对应镜像及版本：`hazx/citools:0.2`
 
-## 镜像所包含的组件
+## 镜像所包含的组件及环境
 
 - Ubuntu: 20.04.5 LTS
 - Kernel: 5.4.0-139-generic
