@@ -6,8 +6,7 @@ CI-Tools 又名 CI-Base，是一个用于 Gitlab CI/CD 阶段的工具镜像，�
 
 ## 镜像所包含的组件及环境
 
-- Ubuntu: 20.04.5 LTS
-- Kernel: 5.4.0-139-generic
+- Ubuntu: 20.04.6 LTS
 - Docker cli: 20.10.23
 - Kaniko: v1.9.1
 - Kubectl: 1.21.14
