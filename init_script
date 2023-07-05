@@ -3,7 +3,7 @@
 ## 配置组件版本
 ver_docker=5:20.10.23~3-0~ubuntu-focal
 ver_kubectl=1.21.14-00
-ver_nodejs=v14.21.2
+ver_nodejs=v18.16.1
 ver_maven=3.9.0
 
 ## 更换 apt 源
