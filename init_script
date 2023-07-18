@@ -4,7 +4,8 @@
 ver_docker=5:20.10.23~3-0~ubuntu-focal
 ver_kubectl=1.21.14-00
 ver_nodejs=v18.16.1
-ver_maven=3.9.0
+# 注意阿里云镜像站是否还有这个版本，阿里云会清理旧版本
+ver_maven=3.9.3
 
 ## 更换 apt 源
 mv /etc/apt/sources.list /etc/apt/sources.list.bk
