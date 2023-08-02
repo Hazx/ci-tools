@@ -1,10 +1,10 @@
 #!/bin/bash
 
-base_img="ubuntu:focal-20230624"
-kanico_img="gcr.io/kaniko-project/executor:v1.9.1"
-# kanico_img="hazx-docker.hmacg.cn/kaniko-project/executor:v1.9.1"
+base_img="ubuntu:focal-20230126"
+# kanico_img="gcr.io/kaniko-project/executor:v1.9.1"
+kanico_img="hazx-docker.hmacg.cn/kaniko-project/executor:v1.9.1"
 dest_img="citools"   # 不能是路径，不能带 /
-dest_tag="0.4"
+dest_tag="node14_mvn3_v2"
 
 if [[ $(id -u) -ne 0 ]];then
     echo "必须在root账户下运行，请尝试使用 sudo -i 切换账户。" 
