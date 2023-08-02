@@ -1,0 +1,81 @@
+#!/bin/bash
+
+## 配置组件版本
+ver_docker=5:20.10.23~3-0~ubuntu-focal
+ver_kubectl=1.21.14-00
+ver_nodejs=v16.20.1
+# 注意阿里云镜像站是否还有这个版本，阿里云会清理旧版本
+ver_maven=3.9.3
+
+## 更换 apt 源
+mv /etc/apt/sources.list /etc/apt/sources.list.bk
+cat <<EOF > /etc/apt/sources.list
+deb http://mirrors.bfsu.edu.cn/ubuntu/ focal main restricted universe multiverse
+# deb-src http://mirrors.bfsu.edu.cn/ubuntu/ focal main restricted universe multiverse
+deb http://mirrors.bfsu.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
+# deb-src http://mirrors.bfsu.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
+deb http://mirrors.bfsu.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
+# deb-src http://mirrors.bfsu.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
+deb http://mirrors.bfsu.edu.cn/ubuntu/ focal-security main restricted universe multiverse
+# deb-src http://mirrors.bfsu.edu.cn/ubuntu/ focal-security main restricted universe multiverse
+# deb http://mirrors.bfsu.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
+# deb-src http://mirrors.bfsu.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
+EOF
+apt-get update -y
+
+## 调整时区
+export DEBIAN_FRONTEND="noninteractive" 
+apt-get install -y tzdata
+cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+## 更新和安装组件
+apt-get full-upgrade -y
+apt-get install -y openssl curl vim wget zip unzip git lsof net-tools psmisc zlib1g gzip expect \
+    apt-transport-https ca-certificates lsb-release apt-utils aptitude \
+    software-properties-common sudo lvm2 gnupg tree bash-completion iputils-ping
+
+## Docker cli
+mkdir -p /etc/apt/keyrings/
+curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://mirrors.bfsu.edu.cn/docker-ce/linux/ubuntu $(lsb_release -cs) stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+apt-get update -y
+apt-get install -y docker-ce-cli=${ver_docker}
+mkdir -p /root/.docker
+
+## Kubectl
+curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add - 
+sudo tee -a /etc/apt/sources.list.d/kubernetes.list << EOF
+deb https://mirrors.pku.edu.cn/kubernetes/apt/ kubernetes-xenial main
+EOF
+apt-get update -y
+apt-get install -y kubectl=${ver_kubectl}
+mkdir -p /root/.kube
+
+## Node.js
+cd /opt
+curl -o nodejs.tar.gz https://mirrors.bfsu.edu.cn/nodejs-release/${ver_nodejs}/node-${ver_nodejs}-linux-x64.tar.gz
+tar zxvf nodejs.tar.gz
+rm -f nodejs.tar.gz
+mv node-${ver_nodejs}-linux-x64 nodejs
+ln -s /opt/nodejs/bin/node /usr/bin/node
+ln -s /opt/nodejs/lib/node_modules/corepack/dist/corepack.js /usr/bin/corepack
+ln -s /opt/nodejs/lib/node_modules/npm/bin/npm-cli.js /usr/bin/npm
+ln -s /opt/nodejs/lib/node_modules/npm/bin/npx-cli.js /usr/bin/npx
+
+## JDK8 / Maven
+apt-get install -y openjdk-8-jdk
+cd /opt
+curl -o maven.tar.gz https://mirrors.aliyun.com/apache/maven/maven-${ver_maven:0:1}/${ver_maven}/binaries/apache-maven-${ver_maven}-bin.tar.gz
+tar zxvf maven.tar.gz
+rm -f maven.tar.gz
+mv apache-maven-${ver_maven} maven
+
+## CI 工作目录
+mkdir /ci_workdir
+
+## 清理
+apt-get autoremove -y
+apt-get clean
+rm -f /init_script.sh
+
